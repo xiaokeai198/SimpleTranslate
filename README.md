@@ -1,176 +1,145 @@
-# SimpleTranslate 2.0 / 简单翻译 2.0
+# SimpleTranslate 2.0
 
-**SimpleTranslate（简单翻译）** 是一个 Minecraft 客户端文本翻译模组，适合游玩外语地图、RPG 服务器、剧情整合包、任务书、物品 Lore、告示牌和各种游戏 UI 提示。
+SimpleTranslate is a client-side Minecraft translation mod for players who play foreign-language maps, RPG servers, adventure content, quest books, item lore, signs, and UI prompts.
 
-**2.0 版本支持所有模型/API 支持的语言互转。**  
-它不是只能英译中。只要你配置的翻译模型支持，就可以进行英译中、中译英、日译中、韩译中、多语言混合文本翻译，或任意源语言到任意目标语言的转换。
+**SimpleTranslate 2.0 can translate between all languages supported by your configured translation model/API.**  
+It is not limited to English -> Chinese. You can use it for English, Chinese, Japanese, Korean, mixed multilingual text, or any other source/target language combination your model supports.
 
-> 当前公开发布的 2.0 版本：**仅提供 Fabric 构建**。
+> Current public 2.0 download: **Fabric builds only**.
 
-[下载 SimpleTranslate 2.0](https://github.com/xiaokeai198/SimpleTranslate/releases/tag/v2.0)
+[Download SimpleTranslate 2.0](https://github.com/baokaixin/SimpleTranslate/releases/tag/v2.0)
 
----
+## What Makes 2.0 Different
 
-## 2.0 有什么不同
+SimpleTranslate 2.0 rebuilds the translation system around Minecraft **Component JSON**.
 
-SimpleTranslate 2.0 将翻译架构重构为 Minecraft **Component JSON** 管线。
+Instead of flattening game text into plain strings and guessing colors or positions later, 2.0 sends Minecraft text components to the model and receives translated Component JSON back. This helps preserve:
 
-旧式翻译通常会把游戏文本压平成普通字符串，翻译后再尝试猜测颜色、样式和位置；这很容易让复杂文本出现颜色错位、结构丢失、悬浮提示混乱等问题。
+- colors and formatting,
+- line breaks,
+- item lore structure,
+- hover tooltip structure,
+- sign layout,
+- book page order,
+- chat formatting,
+- HUD/title/actionbar text,
+- advancement names and descriptions.
 
-2.0 会尽量把 Minecraft 原生文本组件交给模型翻译，并接收翻译后的 Component JSON，再作为游戏组件显示。这让它更适合保留：
+The goal is simple: translate Minecraft text while keeping it looking like Minecraft.
 
-- 颜色与格式；
-- 换行与文本层级；
-- 物品 Lore 结构；
-- 聊天与书本悬浮提示结构；
-- 告示牌布局；
-- 书本页面顺序；
-- 聊天格式；
-- HUD、标题、ActionBar 文本；
-- 成就名称与描述。
+## Main Features
 
-一句话：**让 Minecraft 里的文本变成你能读懂的语言，同时尽量保持它原本就该有的样子。**
+### Chat Translation
 
----
+Translate server messages, RPG menu text, narrator messages, quest prompts, and formatted chat content.
 
-## 主要功能
+Chat hover text is handled by a dedicated hover translation path, so hidden hover text is not translated accidentally as a side effect of translating visible chat.
 
-### 聊天翻译
+![Chat before](https://github.com/baokaixin/SimpleTranslate/releases/download/v2.0/demo-chat-before.png)
 
-翻译服务器消息、RPG 菜单文本、旁白提示、任务提示和带格式的聊天内容。
+![Chat after](https://github.com/baokaixin/SimpleTranslate/releases/download/v2.0/demo-chat-after.png)
 
-聊天中的隐藏悬浮提示会走独立的悬浮提示翻译路径，不会在翻译可见聊天时被顺手翻译，从而减少不必要的 Token 消耗和结构污染。
+### Item Tooltip Translation
 
-![聊天原文](https://github.com/xiaokeai198/SimpleTranslate/releases/download/v2.0/demo-chat-before.png)
+Translate item names, attributes, lore, NBT-related text, and complex colored tooltips.
 
-![聊天译文](https://github.com/xiaokeai198/SimpleTranslate/releases/download/v2.0/demo-chat-after.png)
+Useful for RPG servers, custom items, adventure maps, and modpacks with long item descriptions.
 
-### 物品提示翻译
+### Sign Translation
 
-翻译物品名称、属性、Lore、NBT 相关提示和复杂彩色物品描述。
+Translate single signs or groups of signs. This is useful for adventure maps, story walls, server rule boards, puzzle hints, and map instructions.
 
-适合 RPG 服务器、自定义装备、冒险地图、剧情整合包和大量英文物品说明的场景。
+![Sign before](https://github.com/baokaixin/SimpleTranslate/releases/download/v2.0/demo-sign-before.png)
 
-### 告示牌翻译
+![Sign after](https://github.com/baokaixin/SimpleTranslate/releases/download/v2.0/demo-sign-after.png)
 
-支持单个告示牌或连续告示牌组翻译，适合地图说明、剧情墙、服务器规则板、谜题提示和场景介绍。
+### Book Translation
 
-![告示牌原文](https://github.com/xiaokeai198/SimpleTranslate/releases/download/v2.0/demo-sign-before.png)
+Translate written books and book pages while keeping the reading order clear.
 
-![告示牌译文](https://github.com/xiaokeai198/SimpleTranslate/releases/download/v2.0/demo-sign-after.png)
+![Book before](https://github.com/baokaixin/SimpleTranslate/releases/download/v2.0/demo-book-before.png)
 
-### 书本翻译
+![Book after](https://github.com/baokaixin/SimpleTranslate/releases/download/v2.0/demo-book-after.png)
 
-支持书本页面翻译，适合剧情书、任务书、说明书和服务器百科内容。
+### Advancement Translation
 
-![书本原文](https://github.com/xiaokeai198/SimpleTranslate/releases/download/v2.0/demo-book-before.png)
+Translate advancement names and descriptions.
 
-![书本译文](https://github.com/xiaokeai198/SimpleTranslate/releases/download/v2.0/demo-book-after.png)
+![Advancement before](https://github.com/baokaixin/SimpleTranslate/releases/download/v2.0/demo-advancement-before.png)
 
-### 成就翻译
+![Advancement after](https://github.com/baokaixin/SimpleTranslate/releases/download/v2.0/demo-advancement-after.png)
 
-翻译成就/进度的名称和描述。
+### More Supported Game Text
 
-![成就原文](https://github.com/xiaokeai198/SimpleTranslate/releases/download/v2.0/demo-advancement-before.png)
+SimpleTranslate can also translate:
 
-![成就译文](https://github.com/xiaokeai198/SimpleTranslate/releases/download/v2.0/demo-advancement-after.png)
+- boss bars,
+- scoreboards,
+- titles and subtitles,
+- actionbar text,
+- entity names,
+- text display entities,
+- item hover tooltips,
+- book/chat hover tooltips,
+- other Minecraft UI text surfaces supported by the mod.
 
-### 更多游戏文本
+## Any-Language Translation
 
-SimpleTranslate 还支持翻译：
+The mod itself does not lock you to one language pair.
 
-- Boss 血条；
-- 计分板；
-- 标题与副标题；
-- ActionBar 动作栏文本；
-- 实体名称；
-- 文字展示实体；
-- 物品悬浮提示；
-- 聊天/书本悬浮提示；
-- 模组支持的其他 Minecraft UI 文本表面。
+You can configure the target language in the settings and use any translation provider/model that supports your desired languages.
 
----
+Examples:
 
-## 所有语言互转
+- English -> Chinese
+- Chinese -> English
+- Japanese -> Chinese
+- Korean -> Chinese
+- Mixed multilingual text -> Chinese
+- Any supported source language -> any supported target language
 
-SimpleTranslate 不锁定固定语言对。
+Translation quality depends on the model/API you configure.
 
-你可以在设置中配置目标语言，并使用任意兼容的翻译服务/模型完成翻译。
+## Cache, Token Statistics, and Original Text
 
-示例：
+SimpleTranslate includes tools for long-term gameplay:
 
-- 英文 -> 中文；
-- 中文 -> 英文；
-- 日文 -> 中文；
-- 韩文 -> 中文；
-- 多语言混合文本 -> 中文；
-- 任意模型支持的源语言 -> 任意模型支持的目标语言。
+- persistent translation cache,
+- shared cache support,
+- token/request statistics,
+- configurable translation providers,
+- temporary hold-to-show-original behavior.
 
-实际翻译质量取决于你配置的模型/API。
+The hold-to-show-original feature is useful when checking the source text, comparing translations, or taking screenshots.
 
----
+## Supported Fabric Versions
 
-## 缓存、Token 统计与显示原文
+SimpleTranslate 2.0 currently provides Fabric jars for:
 
-SimpleTranslate 提供适合长时间游玩的辅助功能：
+- 1.19.2, 1.19.3, 1.19.4
+- 1.20, 1.20.1, 1.20.2, 1.20.3, 1.20.4, 1.20.5, 1.20.6
+- 1.21, 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11
+- 26.1, 26.1.1, 26.1.2, 26.2
 
-- 持久化翻译缓存；
-- 共享缓存；
-- 请求数与 Token 统计；
-- 可配置翻译服务/API/模型；
-- 按住快捷键临时显示原文。
+Download the matching jar from the [2.0 release page](https://github.com/baokaixin/SimpleTranslate/releases/tag/v2.0).
 
-“按住显示原文”适合校对译文、查看原始文本、截图对比，或者在复杂场景里临时回到原文。
+## Requirements
 
----
+- Minecraft Java Edition
+- Fabric Loader
+- Fabric API
+- Client-side installation
+- Mod Menu is optional but recommended for opening settings easily
+- A configured translation provider/API/model
 
-## Fabric 支持版本
+## Notes
 
-SimpleTranslate 2.0 当前提供以下 Fabric 版本：
+- SimpleTranslate is a client-side helper mod. Servers do not need to install it.
+- Translation speed, quality, and token usage depend on your configured provider/model and network environment.
+- For best structure preservation, use a model that follows JSON/component instructions reliably.
 
-- 1.19.2、1.19.3、1.19.4；
-- 1.20、1.20.1、1.20.2、1.20.3、1.20.4、1.20.5、1.20.6；
-- 1.21、1.21.1、1.21.2、1.21.3、1.21.4、1.21.5、1.21.6、1.21.7、1.21.8、1.21.9、1.21.10、1.21.11；
-- 26.1、26.1.1、26.1.2、26.2。
+## Links
 
-请从 [2.0 Release 页面](https://github.com/xiaokeai198/SimpleTranslate/releases/tag/v2.0) 下载与你的 Minecraft 版本匹配的 jar。
+- [GitHub Releases](https://github.com/baokaixin/SimpleTranslate/releases)
+- [MC百科 Page](https://www.mcmod.cn/class/23154.html)
 
----
-
-## 安装需求
-
-- Minecraft Java Edition；
-- Fabric Loader；
-- Fabric API；
-- 客户端安装；
-- Mod Menu 可选，但推荐安装，方便打开设置界面；
-- 一个可用的翻译服务/API/模型。
-
----
-
-## 注意事项
-
-- SimpleTranslate 是客户端辅助模组，服务器不需要安装。
-- 翻译速度、质量和 Token 消耗取决于你配置的服务商、模型和网络环境。
-- 如果希望复杂格式文本更稳定，建议使用更擅长遵循 JSON/结构化输出的模型。
-
----
-
-# English Overview
-
-SimpleTranslate 2.0 is a client-side Minecraft translation mod for foreign-language maps, RPG servers, adventure content, quest books, item lore, signs, and UI prompts.
-
-It can translate between **any languages supported by your configured model/API**, not only English to Chinese.
-
-This public 2.0 release currently provides **Fabric builds only**.
-
-## Key Features
-
-- Component JSON based translation pipeline.
-- Chat, item tooltip, sign, book, advancement, HUD/title/actionbar, scoreboard, boss bar, entity name, and hover tooltip translation.
-- Better preservation of colors, line breaks, formatting, and Minecraft text structure.
-- Persistent cache, shared cache, token statistics, configurable providers, and hold-to-show-original behavior.
-
-Download: [SimpleTranslate 2.0 Release](https://github.com/xiaokeai198/SimpleTranslate/releases/tag/v2.0)
-
-MC百科: [简单翻译](https://www.mcmod.cn/class/23154.html)
